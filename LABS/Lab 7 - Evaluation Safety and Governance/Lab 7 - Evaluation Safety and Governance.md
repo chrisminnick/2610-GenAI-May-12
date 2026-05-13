@@ -1,6 +1,6 @@
 # Lab 7 — Evaluation, Safety, and Governance
 
-**Module:** 8 (Evaluation, Safety & Governance) — *fills the missing module*
+**Module:** 8 (Evaluation, Safety & Governance) — _fills the missing module_
 **Time:** 75 minutes
 **Language:** Python (with optional Node.js variant referenced)
 **Prerequisites:** Python 3.10+, an OpenAI API key, a terminal
@@ -21,13 +21,13 @@ A green check across all three means "ready to ship."
 
 ## Source material
 
-This lab combines three pieces from your books:
+This lab combines three pieces from "A Developer's Guide to Integrating Generative AI into Applications":
 
 - **Golden-set evaluation** from `ai-integration/chapter-09/spot-toolkit` (SPOT's eval runner and golden_set/ directory)
 - **Moderation pipeline** from `ai-integration/chapter-12/moderated_chatbot.py`
 - **Cost tracking** from `ai-integration/chapter-13` (token counters and usage logging)
 
-You'll see references to those files throughout. The full SPOT toolkit is too much code for one lab, but its *patterns* are exactly what production teams build.
+You'll see references to those files throughout. The full SPOT toolkit is too much code for one lab, but its _patterns_ are exactly what production teams build.
 
 ## Setup
 
@@ -194,7 +194,7 @@ def check_safety(output: str) -> dict:
     return results
 ```
 
-**Note:** the `extract_email` test case will *intentionally* fail the PII check — that's a useful conversation. Sometimes a use case requires PII in the output (extraction tasks). Real systems mark some prompts as "PII-allowed" via metadata.
+**Note:** the `extract_email` test case will _intentionally_ fail the PII check — that's a useful conversation. Sometimes a use case requires PII in the output (extraction tasks). Real systems mark some prompts as "PII-allowed" via metadata.
 
 ## Part 4 — The cost gate (10 min)
 
@@ -326,7 +326,7 @@ You should see a colored-by-emoji report. Some cases will pass cleanly, some wil
 Walk through the results and ask:
 
 - **Which cases failed eval but should have passed?** Often the model produces correct content in a slightly different format than your expectation. This is why eval expectations need to be loose enough to allow valid variation but tight enough to catch regressions.
-- **Did `extract_email` fail safety?** Yes — because PII appears in the output. But the *user asked for it*. This shows why safety policies need context: "PII allowed for extraction tasks" requires a metadata flag.
+- **Did `extract_email` fail safety?** Yes — because PII appears in the output. But the _user asked for it_. This shows why safety policies need context: "PII allowed for extraction tasks" requires a metadata flag.
 - **What does the cost projection tell you?** Even at 10k calls per case, the total is usually under $5 with gpt-4o-mini. Switch the script to `gpt-4o` and re-run; you'll see costs jump ~10x. This is the trade-off conversation every team has.
 - **What would change if you swapped models?** Modify `MODEL = "gpt-4o"` and re-run. Quality usually goes up; cost definitely does; some failures might still happen. Production teams run this report across multiple models to pick the cheapest one that passes.
 

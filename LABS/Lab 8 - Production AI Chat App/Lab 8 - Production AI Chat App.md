@@ -25,7 +25,7 @@ The starter code is a working-but-minimal version. You'll add:
 
 ## Source material
 
-The starter code is in your AI integration book:
+The starter code is in "A Developer's Guide to Integrating Generative AI into Applications":
 
 - React frontend (initial): `ai-integration/chapter-08/chat-client-react-initial/`
 - React frontend (final reference): `ai-integration/chapter-08/chat-client-react-final/`
@@ -73,6 +73,7 @@ Open the URL shown by Vite (usually `http://localhost:5173`). You should see a b
 The starter chat works, but every message is a fresh conversation — the model has no memory.
 
 Try this:
+
 1. Send: "My name is Alex."
 2. Send: "What's my name?"
 
@@ -80,7 +81,7 @@ The model says it doesn't know. **That's the bug we'll fix first.**
 
 ## Part 2 — Add conversation memory (15 min)
 
-The fix is to send the *full conversation history* with every request, not just the latest message.
+The fix is to send the _full conversation history_ with every request, not just the latest message.
 
 ### Backend changes
 
@@ -118,23 +119,23 @@ The pattern:
 
 ```jsx
 const [messages, setMessages] = useState([
-  { role: "system", content: "You are a helpful assistant. Be concise." }
+  { role: 'system', content: 'You are a helpful assistant. Be concise.' },
 ]);
-const [input, setInput] = useState("");
+const [input, setInput] = useState('');
 
 async function sendMessage() {
-  const newMessages = [...messages, { role: "user", content: input }];
+  const newMessages = [...messages, { role: 'user', content: input }];
   setMessages(newMessages);
-  setInput("");
+  setInput('');
 
-  const res = await fetch("http://localhost:5000/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const res = await fetch('http://localhost:5000/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ messages: newMessages }),
   });
   const data = await res.json();
 
-  setMessages([...newMessages, { role: "assistant", content: data.reply }]);
+  setMessages([...newMessages, { role: 'assistant', content: data.reply }]);
 }
 ```
 
@@ -174,9 +175,9 @@ def chat():
 Replace the `await res.json()` block:
 
 ```jsx
-const res = await fetch("http://localhost:5000/chat", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
+const res = await fetch('http://localhost:5000/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ messages: newMessages }),
 });
 
@@ -184,15 +185,18 @@ const reader = res.body.getReader();
 const decoder = new TextDecoder();
 
 // Add a placeholder assistant message we'll update as chunks arrive
-let assistantContent = "";
-setMessages([...newMessages, { role: "assistant", content: "" }]);
+let assistantContent = '';
+setMessages([...newMessages, { role: 'assistant', content: '' }]);
 
 while (true) {
   const { done, value } = await reader.read();
   if (done) break;
   const chunk = decoder.decode(value);
   assistantContent += chunk;
-  setMessages([...newMessages, { role: "assistant", content: assistantContent }]);
+  setMessages([
+    ...newMessages,
+    { role: 'assistant', content: assistantContent },
+  ]);
 }
 ```
 
@@ -208,11 +212,14 @@ Add error handling around the fetch:
 try {
   // ... the streaming code above
 } catch (err) {
-  setMessages([...newMessages, {
-    role: "assistant",
-    content: `⚠️ Error: ${err.message}. Please try again.`,
-    isError: true,
-  }]);
+  setMessages([
+    ...newMessages,
+    {
+      role: 'assistant',
+      content: `⚠️ Error: ${err.message}. Please try again.`,
+      isError: true,
+    },
+  ]);
 }
 ```
 
@@ -237,7 +244,7 @@ Or:
 You are a customer support assistant for a company that sells outdoor gear. Be friendly and concise. If asked about anything unrelated to outdoor gear, politely decline.
 ```
 
-Restart and notice how the *same questions* produce different responses. This is Module 4's prompt engineering applied to a real product — the system prompt is the most important part of your application code.
+Restart and notice how the _same questions_ produce different responses. This is Module 4's prompt engineering applied to a real product — the system prompt is the most important part of your application code.
 
 ## Part 6 — Extensions (10 min if time)
 
